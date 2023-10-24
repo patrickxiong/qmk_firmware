@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* legacy keymap support */
 #define USE_LEGACY_KEYMAP
-
+#define DEBUG_MATRIX_SCAN_RATE
 
 /* key combination for command */
 #define IS_COMMAND() ( \
