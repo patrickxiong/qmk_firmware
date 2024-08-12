@@ -105,6 +105,8 @@ uint8_t matrix_scan(void) {
         XT_STATE_E1_1D,
         XT_STATE_E1_9D,
     } state = XT_STATE_INIT;
+	
+	static uint8_t lastMake=0;
 
     uint8_t code = xt_host_recv();
 
@@ -112,7 +114,7 @@ uint8_t matrix_scan(void) {
         return 0;
     }
 
-    xprintf("%02X ", code);
+    //xprintf("%02X ", code);
 
     switch (state) {
         case XT_STATE_INIT:
@@ -125,9 +127,24 @@ uint8_t matrix_scan(void) {
                     break;
                 default:
                     if (code < 0x80) {
+						if(lastMake!=0)
+						{
+							lastMake=0;
+							matrix_break(lastMake);
+							break;
+						}
                         matrix_make(code);
+						if(code!=0x2A && code!=0x3A && code!=0x36 && code!=0x38)
+						{
+							lastMake=code;
+						}
                     } else {
-                        matrix_break(code & 0x7F);
+						uint8_t realCode=code & 0x7F;
+                        matrix_break(realCode);
+						if(realCode==lastMake)
+						{
+							lastMake=0;
+						}
                     }
                     break;
             }
