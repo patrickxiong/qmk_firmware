@@ -48,6 +48,18 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #define XT_DATA_READ() readPin(XT_DATA_PIN)
 
+#define XT_SIG_LO()               \
+    do {                           \
+        writePinLow(SIG_PIN);  \
+        setPinOutput(SIG_PIN); \
+    } while (0)
+
+#define XT_SIG_HI()               \
+    do {                           \
+        writePinHigh(SIG_PIN);  \
+        setPinOutput(SIG_PIN); \
+    } while (0)
+
 #define XT_DATA_LO()               \
     do {                           \
         writePinLow(XT_DATA_PIN);  \

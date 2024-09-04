@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define XT_CLOCK_PIN D1
 #define XT_DATA_PIN D0
 #define XT_RST_PIN B7
+#define SIG_PIN D4
 
 /* hard reset: low pulse for 500ms and after that HiZ for safety */
 #define XT_RESET() do { \

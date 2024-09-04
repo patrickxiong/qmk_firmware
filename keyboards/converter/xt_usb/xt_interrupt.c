@@ -56,6 +56,9 @@ void xt_host_init(void) {
     XT_RESET();
 #endif
 
+	XT_SIG_LO();
+    wait_ms(20);
+
     /* soft reset: pull clock line down for 20ms */
     XT_DATA_LO();
     XT_CLOCK_LO();
@@ -89,7 +92,7 @@ ISR(XT_INT_VECT) {
      *
      * https://github.com/tmk/tmk_keyboard/wiki/IBM-PC-XT-Keyboard-Protocol
      */
-    static enum { START, BIT0, BIT1, BIT2, BIT3, BIT4, BIT5, BIT6, BIT7 } state = START;
+    static enum { START0, START1, BIT0, BIT1, BIT2, BIT3, BIT4, BIT5, BIT6, BIT7 } state = START0;
     static uint8_t data                                                         = 0;
 
     uint8_t dbit = XT_DATA_READ();
@@ -98,9 +101,11 @@ ISR(XT_INT_VECT) {
     // if (XT_CLOCK_READ()) return;
 
     switch (state) {
-        case START:
+        case START0:
+		case START1:
+		    
             // ignore start(0) bit
-            if (!dbit) return;
+            //if (!dbit) return;
             break;
         case BIT0 ... BIT7:
             data >>= 1;
@@ -109,7 +114,7 @@ ISR(XT_INT_VECT) {
     }
     if (state++ == BIT7) {
         pbuf_enqueue(data);
-        state = START;
+        state = START0;
         data  = 0;
     }
     return;

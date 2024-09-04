@@ -51,7 +51,7 @@ __attribute__ ((weak))
 void matrix_scan_user(void) { }
 
 void matrix_init(void) {
-    debug_enable = true;
+    debug_enable = false;
     xt_host_init();
 
     // initialize matrix state: all keys off
@@ -129,8 +129,12 @@ uint8_t matrix_scan(void) {
                     if (code < 0x80) {
 						if(lastMake!=0)
 						{
-							lastMake=0;
+						    XT_SIG_HI();
+							wait_ms(200);
+							XT_SIG_LO();
+
 							matrix_break(lastMake);
+							lastMake=0;
 							break;
 						}
                         matrix_make(code);
